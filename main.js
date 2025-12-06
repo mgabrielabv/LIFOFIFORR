@@ -10,7 +10,7 @@ const procesadorDatos = new ProcesadorDatos();
 
 let actividades = [];
 let actividadesBase = [];
-let quantum = 3;
+let quantum = 4;
 let resultados = {
     fifo: null,
     lifo: null,
@@ -18,7 +18,6 @@ let resultados = {
 };
 let seleccionActual = null;
 
-// Inicializar aplicaci�n
 async function inicializarAplicacion() {
     configurarEventos();
     await cargarDatosIniciales();
