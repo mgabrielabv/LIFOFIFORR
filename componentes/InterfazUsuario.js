@@ -5,14 +5,12 @@ class InterfazUsuario {
       btnProcesarTodos: document.getElementById('btn-procesar-todos'),
       btnToggleDatos: document.getElementById('btn-toggle-datos'),
       btnRestaurar: document.getElementById('btn-restaurar'),
-      btnLimpiar: document.getElementById('btn-limpiar'),
       inputId: document.getElementById('input-id'),
       inputTi: document.getElementById('input-ti'),
       inputT: document.getElementById('input-t'),
       btnAgregar: document.getElementById('btn-agregar'),
       btnActualizar: document.getElementById('btn-actualizar'),
       btnEliminar: document.getElementById('btn-eliminar'),
-      btnLimpiarForm: document.getElementById('btn-limpiar-form'),
       cuerpoTablaDatos: document.getElementById('cuerpo-tabla-datos')
     };
   }
@@ -151,23 +149,6 @@ class InterfazUsuario {
 
     if (cont) cont.style.display = 'block';
     if (mejor) mejor.textContent = comparacion.mejorMetodo;
-  }
-
-  limpiarInterfaz() {
-    this.mostrarDatos([]);
-    ['fifo', 'lifo', 'rr'].forEach(a => {
-      this.ocultarResultados(a);
-      const cuerpo = document.getElementById(`cuerpo-tabla-${a}`);
-      if (cuerpo) cuerpo.innerHTML = '';
-      const info = document.getElementById(`tiempo-${a}`);
-      if (info) info.textContent = '';
-    });
-    const cuerpoComp = document.getElementById('cuerpo-tabla-comparacion');
-    if (cuerpoComp) cuerpoComp.innerHTML = '';
-    const mejor = document.getElementById('contenedor-mejor-metodo');
-    if (mejor) mejor.textContent = '';
-    const tablaComp = document.querySelector('#resultados-comparacion .comparison-table');
-    if (tablaComp) tablaComp.style.display = 'none';
   }
 
   #spinnerId(tipo) {

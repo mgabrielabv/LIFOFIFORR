@@ -10,7 +10,7 @@ const procesadorDatos = new ProcesadorDatos();
 
 let actividades = [];
 let actividadesBase = [];
-let quantum = 4;
+let quantum = 3;
 let resultados = {
     fifo: null,
     lifo: null,
@@ -20,6 +20,7 @@ let seleccionActual = null;
 
 async function inicializarAplicacion() {
     configurarEventos();
+    sincronizarQuantum();
     await cargarDatosIniciales();
 }
 
@@ -28,9 +29,7 @@ function configurarEventos() {
 
     if (elementos.inputQuantum) {
         const onQuantumChange = async () => {
-            const nuevo = parseInt(elementos.inputQuantum.value, 10);
-            quantum = Number.isFinite(nuevo) && nuevo > 0 ? nuevo : 3;
-            elementos.inputQuantum.value = quantum;
+            sincronizarQuantum();
             if (manejadorArchivos.validarDatos(actividades)) {
                 await procesarTodos();
             }
@@ -41,12 +40,10 @@ function configurarEventos() {
     if (elementos.btnProcesarTodos) elementos.btnProcesarTodos.addEventListener('click', procesarTodos);
     if (elementos.btnToggleDatos) elementos.btnToggleDatos.addEventListener('click', () => interfazUsuario.toggleDatos());
     if (elementos.btnRestaurar) elementos.btnRestaurar.addEventListener('click', restaurarDatosBase);
-    if (elementos.btnLimpiar) elementos.btnLimpiar.addEventListener('click', limpiarTodo);
 
     if (elementos.btnAgregar) elementos.btnAgregar.addEventListener('click', agregarActividad);
     if (elementos.btnActualizar) elementos.btnActualizar.addEventListener('click', actualizarActividad);
     if (elementos.btnEliminar) elementos.btnEliminar.addEventListener('click', eliminarActividad);
-    if (elementos.btnLimpiarForm) elementos.btnLimpiarForm.addEventListener('click', limpiarSeleccion);
 
     if (elementos.cuerpoTablaDatos) {
         elementos.cuerpoTablaDatos.addEventListener('click', (e) => {
@@ -61,6 +58,13 @@ function configurarEventos() {
             marcarFilaSeleccionada(actividad);
         });
     }
+}
+
+function sincronizarQuantum() {
+    const elementos = interfazUsuario.obtenerElementosDOM();
+    const nuevo = parseInt(elementos.inputQuantum?.value, 10);
+    quantum = Number.isFinite(nuevo) && nuevo > 0 ? nuevo : 3;
+    if (elementos.inputQuantum) elementos.inputQuantum.value = quantum;
 }
 
 function clonarActividades(lista) {
@@ -83,7 +87,7 @@ function marcarFilaSeleccionada(actividad) {
     });
 }
 
-function limpiarSeleccion() {
+function deseleccionarFila() {
     seleccionActual = null;
     const cuerpo = document.getElementById('cuerpo-tabla-datos');
     if (cuerpo) {
@@ -117,7 +121,7 @@ async function agregarActividad() {
     if (!nuevo) return;
     actividades.push(nuevo);
     interfazUsuario.mostrarDatos(actividades);
-    limpiarSeleccion();
+    deseleccionarFila();
     await procesarTodos();
 }
 
@@ -135,7 +139,7 @@ async function actualizarActividad() {
     }
     actividades[idx] = actualizado;
     interfazUsuario.mostrarDatos(actividades);
-    limpiarSeleccion();
+    deseleccionarFila();
     await procesarTodos();
 }
 
@@ -146,7 +150,7 @@ async function eliminarActividad() {
     }
     actividades = actividades.filter(a => a.actividad !== seleccionActual);
     interfazUsuario.mostrarDatos(actividades);
-    limpiarSeleccion();
+    deseleccionarFila();
     await procesarTodos();
 }
 
@@ -210,6 +214,7 @@ async function restaurarDatosBase() {
 }
 
 async function procesarTodos() {
+    sincronizarQuantum();
     if (!manejadorArchivos.validarDatos(actividades)) {
         interfazUsuario.mostrarError('No hay datos para procesar. Cargue un archivo CSV primero.');
         return;
@@ -270,16 +275,6 @@ async function procesarAlgoritmo(algoritmo) {
 function actualizarComparacion() {
     const comparacion = procesadorDatos.compararAlgoritmos(resultados);
     interfazUsuario.mostrarComparacion(comparacion);
-}
-
-function limpiarTodo() {
-    actividades = [];
-    actividadesBase = [];
-    resultados = { fifo: null, lifo: null, rr: null };
-
-    manejadorArchivos.limpiarActividades();
-    interfazUsuario.limpiarInterfaz();
-    interfazUsuario.ocultarError();
 }
 
 document.addEventListener('DOMContentLoaded', inicializarAplicacion);

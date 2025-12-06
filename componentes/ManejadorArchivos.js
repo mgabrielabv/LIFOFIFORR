@@ -84,10 +84,6 @@ F,5,2`;
     obtenerActividades() {
         return this.actividades;
     }
-
-    limpiarActividades() {
-        this.actividades = [];
-    }
 }
 
 export default ManejadorArchivos;
