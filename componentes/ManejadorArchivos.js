@@ -1,10 +1,8 @@
-// Manejo de archivos CSV
 class ManejadorArchivos {
     constructor() {
         this.actividades = [];
     }
 
-    // Leer CSV desde una URL (por ejemplo, data.csv en la raíz)
     async cargarCSVDesdeURL(url) {
         const respuesta = await fetch(url);
         if (!respuesta.ok) {
@@ -15,7 +13,6 @@ class ManejadorArchivos {
         return this.actividades;
     }
 
-    // Leer archivo CSV
     leerArchivoCSV(archivo) {
         return new Promise((resolve, reject) => {
             const lector = new FileReader();
@@ -38,7 +35,6 @@ class ManejadorArchivos {
         });
     }
 
-    // Parsear contenido CSV
     parsearCSV(contenido) {
         const lineas = contenido.split('\n');
         this.actividades = [];
@@ -53,7 +49,6 @@ class ManejadorArchivos {
                 const ti = parseFloat(partes[1].trim());
                 const t = parseFloat(partes[2].trim());
                 
-                // Si es cabecera (ej. "label,x,y"), saltarla sin lanzar error
                 if (isNaN(ti) || isNaN(t)) {
                     if (i === 0) continue;
                     throw new Error(`Línea ${i+1}: Los valores de tiempo deben ser números`);
@@ -67,13 +62,9 @@ class ManejadorArchivos {
             throw new Error('No se encontraron datos válidos en el archivo CSV');
         }
         
-        // Ordenar por tiempo inicial (ti)
-        this.actividades.sort((a, b) => a.ti - b.ti);
-        
         return this.actividades;
     }
 
-    // Cargar datos de ejemplo
     cargarDatosEjemplo() {
         const ejemploCSV = `A,0,5
 B,1,3
@@ -86,17 +77,14 @@ F,5,2`;
         return this.actividades;
     }
 
-    // Validar datos
     validarDatos(datos) {
         return datos && datos.length > 0;
     }
 
-    // Obtener actividades
     obtenerActividades() {
         return this.actividades;
     }
 
-    // Limpiar actividades
     limpiarActividades() {
         this.actividades = [];
     }

@@ -11,15 +11,13 @@
     <div class="container">
         <header>
             <h1><i class="fas fa-tasks"></i> Planificador de Procesos</h1>
-            <p class="subtitle">FIFO, LIFO y Round Robin (RR) - Análisis comparativo de algoritmos de planificación</p>
+            <p class="subtitle">FIFO, LIFO y Round Robin (RR)</p>
         </header>
 
         <main>
             <div class="main-content">
                     <div class="card">
-                        <h2><i class="fas fa-file-upload"></i> Datos precargados</h2>
-                        <p>Se cargan automáticamente desde <strong>data.csv</strong>. Ajusta el quantum y presiona <em>Procesar</em> (ejecuta FIFO, LIFO y RR siempre).</p>
-
+                        <h2><i class="fas fa-file-upload"></i> Ingrese el quantum</h2>
                         <div class="form-group">
                             <label for="quantum"><i class="fas fa-clock"></i> Quantum para RR</label>
                             <input type="number" id="quantum" min="1" value="3" placeholder="Ingrese el valor de quantum">
@@ -27,31 +25,67 @@
                         
                         <div class="buttons">
                             <button class="btn-secondary" id="btn-procesar-todos">
-                                <i class="fas fa-play"></i> Procesar (FIFO, LIFO y RR)
+                                <i class="fas fa-play"></i> Procesar 
                             </button>
-                            <button class="btn-primary" id="btn-toggle-datos">
-                                <i class="fas fa-eye"></i> Mostrar/Ocultar datos
+                            <button class="btn-danger" id="btn-limpiar">
+                                <i class="fas fa-trash-alt"></i> Limpiar
                             </button>
                         </div>
                     </div>
-                    </div>
 
                     <div class="card data-display">
-                        <h2><i class="fas fa-table"></i> Datos Cargados</h2>
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+                            <h2 style="margin:0;"><i class="fas fa-table"></i> Datos Cargados</h2>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                    <button class="btn-primary" id="btn-toggle-datos">
+                                        <i class="fas fa-eye"></i> Mostrar/Ocultar datos
+                                    </button>
+                                    <button class="btn-secondary" id="btn-restaurar">
+                                        <i class="fas fa-rotate-left"></i> Restaurar 
+                                    </button>
+                            </div>
+                        </div>
                         <div id="contenedor-tabla-datos">
                             <p class="no-data">No hay datos cargados. Seleccione un archivo CSV.</p>
                             <table id="tabla-datos" style="display: none;">
                                 <thead>
                                     <tr>
                                         <th>Actividad</th>
-                                        <th>tᵢ (Inicio)</th>
-                                        <th>t (Duración)</th>
+                                        <th>tᵢ </th>
+                                        <th>t</th>
                                     </tr>
                                 </thead>
                                 <tbody id="cuerpo-tabla-datos">
-                                    <!-- Los datos se insertarán aquí -->
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="form-grid" style="margin-top:16px;">
+                            <div class="form-group">
+                                <label for="input-id">Actividad</label>
+                                <input type="text" id="input-id" placeholder="A1" />
+                            </div>
+                            <div class="form-group">
+                                <label for="input-ti">tᵢ </label>
+                                <input type="number" id="input-ti" min="0" step="1" />
+                            </div>
+                            <div class="form-group">
+                                <label for="input-t">t</label>
+                                <input type="number" id="input-t" min="1" step="1" />
+                            </div>
+                        </div>
+                        <div class="buttons">
+                            <button class="btn-primary" id="btn-agregar">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                            <button class="btn-secondary" id="btn-actualizar">
+                                <i class="fas fa-save"></i> Actualizar selección
+                            </button>
+                            <button class="btn-danger" id="btn-eliminar">
+                                <i class="fas fa-times"></i> Eliminar selección
+                            </button>
+                            <button class="btn-secondary" id="btn-limpiar-form">
+                                <i class="fas fa-eraser"></i> Limpiar selección
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -61,7 +95,6 @@
                         <h2><i class="fas fa-chart-bar"></i> Resultados FIFO</h2>
                         <div class="spinner" id="spinner-fifo"></div>
                         <div id="resultados-fifo">
-                            <p class="no-results">Ejecute el algoritmo para ver los resultados</p>
                             <div class="results-table" style="display: none;">
                                 <table id="tabla-fifo">
                                     <thead>
@@ -76,10 +109,10 @@
                                         </tr>
                                     </thead>
                                     <tbody id="cuerpo-tabla-fifo">
-                                        <!-- Resultados FIFO se insertarán aquí -->
+                          
                                     </tbody>
                                 </table>
-                                <div class="time-info" id="tiempo-fifo"></div>
+                                <div class="time-info" id="tiempo-fifo">Tiempo de ejecución (ms): --</div>
                             </div>
                         </div>
                     </div>
@@ -88,7 +121,6 @@
                         <h2><i class="fas fa-chart-bar"></i> Resultados LIFO</h2>
                         <div class="spinner" id="spinner-lifo"></div>
                         <div id="resultados-lifo">
-                            <p class="no-results">Ejecute el algoritmo para ver los resultados</p>
                             <div class="results-table" style="display: none;">
                                 <table id="tabla-lifo">
                                     <thead>
@@ -103,10 +135,10 @@
                                         </tr>
                                     </thead>
                                     <tbody id="cuerpo-tabla-lifo">
-                                        <!-- Resultados LIFO se insertarán aquí -->
+                                     
                                     </tbody>
                                 </table>
-                                <div class="time-info" id="tiempo-lifo"></div>
+                                <div class="time-info" id="tiempo-lifo">Tiempo de ejecución (ms): --</div>
                             </div>
                         </div>
                     </div>
@@ -115,7 +147,6 @@
                         <h2><i class="fas fa-chart-bar"></i> Resultados Round Robin</h2>
                         <div class="spinner" id="spinner-rr"></div>
                         <div id="resultados-rr">
-                            <p class="no-results">Ejecute el algoritmo para ver los resultados</p>
                             <div class="results-table" style="display: none;">
                                 <table id="tabla-rr">
                                     <thead>
@@ -133,7 +164,7 @@
                                         <!-- Resultados RR se insertarán aquí -->
                                     </tbody>
                                 </table>
-                                <div class="time-info" id="tiempo-rr"></div>
+                                <div class="time-info" id="tiempo-rr">Tiempo de ejecución (ms): --</div>
                             </div>
                         </div>
                     </div>
@@ -144,7 +175,6 @@
                 <h2><i class="fas fa-balance-scale"></i> Comparación de Algoritmos</h2>
                 <div class="spinner" id="spinner-comparacion"></div>
                 <div id="resultados-comparacion">
-                    <p class="no-results">Ejecute los algoritmos para ver la comparación</p>
                     <div class="comparison-table" style="display: none;">
                         <table id="tabla-comparacion">
                             <thead>
@@ -154,7 +184,6 @@
                                     <th>T Promedio</th>
                                     <th>E Promedio</th>
                                     <th>I Promedio</th>
-                                    <th>Tiempo Ejecución</th>
                                 </tr>
                             </thead>
                             <tbody id="cuerpo-tabla-comparacion">
@@ -170,8 +199,7 @@
         </main>
 
         <footer class="footer">
-            <p>Planificador de Procesos - FIFO, LIFO y Round Robin</p>
-            <p>Calcula tf, T, E, I para cada actividad y compara los algoritmos</p>
+            <p>Maria Bermudez 32520312 sistemas operativos</p>
         </footer>
     </div>
 

@@ -1,7 +1,5 @@
-// Procesamiento y análisis de datos
 class ProcesadorDatos {
-    
-    // Comparar algoritmos
+
     compararAlgoritmos(resultados) {
         const algoritmos = [
             {
@@ -21,21 +19,19 @@ class ProcesadorDatos {
             }
         ];
         
-        // Determinar el mejor método (menor tiempo de espera promedio E)
         let mejorMetodo = 'FIFO';
-        let menorE = resultados.fifo.promedios.E;
+        let mayorI = resultados.fifo.promedios.I;
         
-        if (resultados.lifo.promedios.E < menorE) {
-            menorE = resultados.lifo.promedios.E;
+        if (resultados.lifo.promedios.I > mayorI) {
+            mayorI = resultados.lifo.promedios.I;
             mejorMetodo = 'LIFO';
         }
         
-        if (resultados.rr.promedios.E < menorE) {
-            menorE = resultados.rr.promedios.E;
+        if (resultados.rr.promedios.I > mayorI) {
+            mayorI = resultados.rr.promedios.I;
             mejorMetodo = 'Round Robin';
         }
         
-        // Formatear datos para la comparación
         const comparacion = algoritmos.map(algo => ({
             nombre: algo.nombre,
             tiempoTotal: algo.datos.tiempoTotal,
@@ -47,27 +43,22 @@ class ProcesadorDatos {
         
         return {
             algoritmos: comparacion,
-            mejorMetodo: `Mejor método: ${mejorMetodo} (Menor tiempo de espera promedio: ${menorE})`
+            mejorMetodo: `Mejor método: ${mejorMetodo} (Mayor I promedio: ${mayorI})`
         };
     }
 
-    // Estimar tiempo de ejecución (simulación)
     estimarTiempoEjecucion(algoritmo, datos) {
-        // Estos son tiempos estimados para demostración
-        // En una aplicación real, estos se medirían realmente
         const tiemposBase = {
             fifo: 2,
             lifo: 2,
             rr: 5
         };
         
-        // Ajustar según la cantidad de procesos
         const factorCantidad = Math.sqrt(datos.procesos.length) / 2;
         
         return Math.round(tiemposBase[algoritmo] * factorCantidad);
     }
 
-    // Calcular estadísticas
     calcularEstadisticas(datos) {
         if (!datos || datos.length === 0) {
             return null;
@@ -88,13 +79,11 @@ class ProcesadorDatos {
         };
     }
 
-    // Calcular promedio
     calcularPromedio(numeros) {
         const suma = numeros.reduce((a, b) => a + b, 0);
         return parseFloat((suma / numeros.length).toFixed(2));
     }
 
-    // Calcular desviación estándar
     calcularDesviacionEstandar(numeros) {
         const promedio = this.calcularPromedio(numeros);
         const diferenciasCuadradas = numeros.map(n => Math.pow(n - promedio, 2));
@@ -102,7 +91,6 @@ class ProcesadorDatos {
         return parseFloat(Math.sqrt(promedioDiferencias).toFixed(2));
     }
 
-    // Formatear número
     formatearNumero(numero, decimales = 2) {
         return parseFloat(numero.toFixed(decimales));
     }

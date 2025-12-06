@@ -3,7 +3,17 @@ class InterfazUsuario {
     return {
       inputQuantum: document.getElementById('quantum'),
       btnProcesarTodos: document.getElementById('btn-procesar-todos'),
-      btnToggleDatos: document.getElementById('btn-toggle-datos')
+      btnToggleDatos: document.getElementById('btn-toggle-datos'),
+      btnRestaurar: document.getElementById('btn-restaurar'),
+      btnLimpiar: document.getElementById('btn-limpiar'),
+      inputId: document.getElementById('input-id'),
+      inputTi: document.getElementById('input-ti'),
+      inputT: document.getElementById('input-t'),
+      btnAgregar: document.getElementById('btn-agregar'),
+      btnActualizar: document.getElementById('btn-actualizar'),
+      btnEliminar: document.getElementById('btn-eliminar'),
+      btnLimpiarForm: document.getElementById('btn-limpiar-form'),
+      cuerpoTablaDatos: document.getElementById('cuerpo-tabla-datos')
     };
   }
 
@@ -24,6 +34,9 @@ class InterfazUsuario {
 
     actividades.forEach(act => {
       const tr = document.createElement('tr');
+      tr.dataset.actividad = act.actividad;
+      tr.dataset.ti = act.ti;
+      tr.dataset.t = act.t;
       tr.innerHTML = `<td>${act.actividad}</td><td>${act.ti}</td><td>${act.t}</td>`;
       cuerpo.appendChild(tr);
     });
@@ -77,7 +90,7 @@ class InterfazUsuario {
     if (cont) cont.style.display = 'none';
   }
 
-  mostrarResultados(algoritmo, resultado, tiempoEjecucion) {
+  mostrarResultados(algoritmo, resultado, tiempoEjecucion, timestampInicio, timestampFin) {
     const tabla = document.getElementById(`tabla-${algoritmo}`);
     const cuerpo = document.getElementById(`cuerpo-tabla-${algoritmo}`);
     const cont = document.querySelector(`#resultados-${algoritmo} .results-table`);
@@ -100,7 +113,20 @@ class InterfazUsuario {
 
     if (cont) cont.style.display = 'block';
     if (infoTiempo) {
-      infoTiempo.textContent = `Tiempo de ejecución: ${tiempoEjecucion.toFixed(2)} ms`;
+      const inicioTexto = timestampInicio ? ` | Inicio: ${this.#formatearHora(timestampInicio)}` : '';
+      const finTexto = timestampFin ? ` | Fin: ${this.#formatearHora(timestampFin)}` : '';
+      infoTiempo.textContent = `Tiempo de ejecución (ms): ${tiempoEjecucion.toFixed(2)}${inicioTexto}${finTexto}`;
+    }
+  }
+
+  #formatearHora(fechaIso) {
+    try {
+      const d = new Date(fechaIso);
+      const base = d.toLocaleTimeString('es-ES', { hour12: false });
+      const ms = String(d.getMilliseconds()).padStart(3, '0');
+      return `${base}.${ms}`;
+    } catch (e) {
+      return fechaIso;
     }
   }
 
@@ -119,8 +145,7 @@ class InterfazUsuario {
         <td>${a.tiempoTotal}</td>
         <td>${a.promedioT}</td>
         <td>${a.promedioE}</td>
-        <td>${a.promedioI}</td>
-        <td>${a.tiempoEjecucion}</td>`;
+        <td>${a.promedioI}</td>`;
       cuerpo.appendChild(tr);
     });
 
@@ -146,9 +171,9 @@ class InterfazUsuario {
   }
 
   #spinnerId(tipo) {
-    if (tipo === 'carga') return 'spinner-fifo'; // usa el de FIFO como indicador simple
+    if (tipo === 'carga') return 'spinner-fifo';
     return `spinner-${tipo}`;
   }
 }
 
-export default InterfazUsuario;// Implementación de algoritmos de planificación
+export default InterfazUsuario;
